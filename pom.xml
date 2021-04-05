@@ -119,6 +119,48 @@
 			</plugin>
 
 			<plugin>
+				<!-- Build an executable JAR -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addBuildEnvironmentEntries>true/</addBuildEnvironmentEntries>
+							<mainClass>io.github.zartc.hangman.HangmanGameMain</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<concat destfile="${project.basedir}/target/${project.build.finalName}.run"
+										binary="yes">
+									<fileset file="${project.basedir}/src/scripts/stub.sh" />
+									<fileset
+										file="${project.basedir}/target/${project.build.finalName}.${project.packaging}" />
+								</concat>
+								<delete
+									file="${project.basedir}/target/${project.build.finalName}.${project.packaging}" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<skipTests>${maven.skip.unit.tests}</skipTests>
