@@ -126,8 +126,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
+							<addBuildEnvironmentEntries>true/</addBuildEnvironmentEntries>
 							<mainClass>io.github.zartc.hangman.HangmanGameMain</mainClass>
 						</manifest>
 					</archive>
