@@ -86,7 +86,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.2.0</version>
 				<executions>
 					<!-- Add a new source directory to our build -->
 					<execution>
@@ -123,7 +122,6 @@
 				<!-- Build an executable JAR -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.1.0</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -137,7 +135,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -163,10 +160,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M5</version>
 				<configuration>
 					<skipTests>${maven.skip.unit.tests}</skipTests>
-					<!-- Excludes integration tests when unit tests are run -->
+					<argLine>--illegal-access=permit</argLine>
+					<!-- Excludes integration tests -->
 					<excludes>
 						<exclude>**/IT*.java</exclude>
 						<exclude>**/*IT.java</exclude>
@@ -178,7 +175,16 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M5</version>
+				<configuration>
+					<skipTests>${maven.skip.integration.tests}</skipTests>
+					<argLine>--illegal-access=permit</argLine>
+					<!-- Excludes unit tests -->
+					<excludes>
+						<exclude>**/Test*.java</exclude>
+						<exclude>**/*Test.java</exclude>
+						<exclude>**/*TestCase.java</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<!-- Invokes both the integration-test and the verify goals of the Failsafe Maven plugin -->
 					<execution>
@@ -187,9 +193,6 @@
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
-						<configuration>
-							<skipTests>${maven.skip.integration.tests}</skipTests>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -197,7 +200,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
 				<executions>
 					<execution>
 						<id>enforce-maven</id>
@@ -220,11 +222,20 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.1.0</version>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>3.0.0</version>
 				</plugin>
 				<plugin>
-					<artifactId>maven-resources-plugin</artifactId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.3.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
 					<version>3.1.0</version>
 				</plugin>
 				<plugin>
@@ -232,53 +243,44 @@
 					<version>3.8.1</version>
 				</plugin>
 				<plugin>
-					<!-- unit tests -->
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0-M5</version>
-					<configuration>
-						<argLine>
-							--illegal-access=permit
-						</argLine>
-					</configuration>
-				</plugin>
-				<plugin>
-					<!-- integration tests -->
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>3.0.0-M5</version>
-					<configuration>
-						<argLine>
-							--illegal-access=permit
-						</argLine>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>3.0.0-M1</version>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.1.2</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>3.0.0-M1</version>
 				</plugin>
 				<plugin>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.0.0-M3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>3.0.0-M5</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>3.0.0-M1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
 					<version>3.0.0-M1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.9.1</version>
 				</plugin>
 				<plugin>
-					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>3.0.0-M3</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>3.2.0</version>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M5</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
